@@ -6,5 +6,9 @@
   "bower_dependencies":{
     "tablesaw":"latest",
     "jquery":"latest"
-  }
+  },
+  "running": false,
+  "minimized": true,
+  "zIndex": 0
+  
 }

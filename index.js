@@ -14,20 +14,37 @@ _
 TERM
 */
 
-methods.add({
-  "tasks": function (n,call_ob,next) {
-    if(curusers[call_ob.user.id]){
-      console.log("already have: "+call_ob.user.id);
+if(typeof ForkRouter == "undefined"){
+  methods.add({
+    "task-monitor-tasks": function (n,call_ob,next) {
+      if(curusers[call_ob.ws.id]){
+        console.log("already have: "+call_ob.ws.id);
 
-      return;
+        return;
+      }
+
+      curusers[call_ob.ws.id] = next;
+      call_ob.ws.on("close", function(){
+        delete curusers[call_ob.ws.id];
+      })
     }
+  });
+}else{
+  methods.add({
+    "tasks": function (n,call_ob,next) {
+      if(curusers[call_ob.user.id]){
+        console.log("already have: "+call_ob.user.id);
 
-    curusers[call_ob.user.id] = next;
-    call_ob.user.on("close", function(){
-      delete curusers[call_ob.user.id];
-    })
-  }
-});
+        return;
+      }
+
+      curusers[call_ob.user.id] = next;
+      call_ob.user.on("close", function(){
+        delete curusers[call_ob.user.id];
+      })
+    }
+  });
+}
 
 top.stdout.on('data', function (data) {
   if(Object.keys(curusers).length > 0)
